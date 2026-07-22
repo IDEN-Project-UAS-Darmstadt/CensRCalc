@@ -13,3 +13,4 @@
 ^\.Rd2pdf\d+$
 ^doc$
 ^Meta$
+^\.devcontainer$
