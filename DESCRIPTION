@@ -1,6 +1,6 @@
 Package: CensRCalc
 Title: Analytical Censoring Parameter Determination
-Version: 0.0.0.9000
+Version: 0.0.1.9000
 URL: https://iden-project-uas-darmstadt.github.io/CensRCalc
 Authors@R: c(
   person("Henrik", "Stahl", email = "henrik.stahl@h-da.de", role = c("aut")),

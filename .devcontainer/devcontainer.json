@@ -1,0 +1,27 @@
+{
+  "name": "CensRCalc R Development",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+
+  "features": {
+     "ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {
+        "packages": "nano,cmake,libuv1-dev,libx11-dev"
+    },
+    "ghcr.io/devcontainers/features/common-utils:2": {},
+    "ghcr.io/rocker-org/devcontainer-features/pandoc:1": {},
+    "ghcr.io/rocker-org/devcontainer-features/r-rig:1": {
+        "version": "release",
+        "vscodeRSupport": true,
+        "installDevTools": true
+    },
+    "ghcr.io/rocker-org/devcontainer-features/r-dependent-packages:0": {}
+  },
+
+  "customizations": {
+    "vscode": {
+      "settings": {
+      },
+      "extensions": [
+      ]
+    }
+  }
+}
