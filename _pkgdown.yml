@@ -8,6 +8,7 @@ reference:
   - CensRCalc
   - estimate_cens_prop
   - find_cens_param
+  - cens_prop_fun-methods
 deploy:
   install_metadata: true
 repo:

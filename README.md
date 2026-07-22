@@ -55,13 +55,25 @@ sapply(c(0.5, 0.7), estimator)
 #> [1] 0.4289338 0.5105715
 ```
 
+``` r
+print(estimator)
+#> <Expected censoring proportion function>
+#> Target parameter : lambda_c 
+#> Target range     : 1e-05 - 5 
+#> Administrative censoring: Inf 
+#> Accrual period   : 0
+plot(estimator)
+```
+
+<img src="man/figures/README-unnamed-chunk-4-1.png" alt="" width="100%" />
+
 We can also find a `lambda_c` that results in a desired censoring
 proportion.
 
 ``` r
 library(progressr)
 
-with_progress({
+with_progress({ # Progress bar is optional
   lambda_c_50 <- find_cens_param(0.5, event_surv, cov_dens, cov_bounds)
   print(lambda_c_50)
 })
@@ -84,6 +96,8 @@ library(devtools)
 document() # to update documentation and roxygen functionality
 load_all() # to load the package functions for development
 build_readme() # to update the README
+build_vignettes() # to build the vignettes
+build_site() # to build the pkgdown site
 test() # to run tests
 check() # to check the package
 covr::package_coverage() # to check code coverage

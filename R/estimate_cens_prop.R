@@ -63,9 +63,14 @@
 #'   (on the probability scale). Must be positive and not too large
 #'   (e.g., < 0.1).
 #'
-#' @return A function of one numeric scalar (named by `target`) that
-#'   returns the expected censoring proportion in \mjeqn{[0,1]}{[0,1]}
-#'   under the supplied model components.
+#' @return
+#' A callable function of one numeric scalar (named by `target`) that
+#' returns the expected censoring proportion in `[0,1]` under the supplied
+#' model components.
+#'
+#' The returned function has class `"cens_prop_fun"` and supports
+#' S3 methods such as [print()] and [plot()] for summarizing and
+#' visualizing the censoring model.
 #'
 #' @import mathjaxr
 #' @importFrom Rdpack reprompt
@@ -86,6 +91,8 @@
 #'   time_admin_cens = 10,
 #'   time_accrual = 0,
 #' )
+#'
+#' print(f_obj)
 #'
 #' f_obj(0.3)
 #' @export
@@ -421,5 +428,24 @@ estimate_cens_prop <- function(
     )
     est_cens_prop
   }
-  evaluate_cens_prop
+  obj <- evaluate_cens_prop
+
+  environment(obj)$spec <- list(
+    event_survival = event_survival,
+    covariate_density = covariate_density,
+    covariate_bounds = covariate_bounds,
+    cens_survival = cens_survival,
+    cens_density = cens_density,
+    time_admin_cens = time_admin_cens,
+    time_accrual = time_accrual,
+    target = target,
+    target_bounds = target_bounds,
+    t_min = t_min,
+    t_max = t_max,
+    abs_tol = abs_tol
+  )
+
+  class(obj) <- c("cens_prop_fun", class(obj))
+
+  obj
 }

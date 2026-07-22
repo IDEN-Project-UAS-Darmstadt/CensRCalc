@@ -75,9 +75,13 @@ tail.}
 (e.g., < 0.1).}
 }
 \value{
-A function of one numeric scalar (named by \code{target}) that
-returns the expected censoring proportion in \mjeqn{[0,1]}{[0,1]}
-under the supplied model components.
+A callable function of one numeric scalar (named by \code{target}) that
+returns the expected censoring proportion in \verb{[0,1]} under the supplied
+model components.
+
+The returned function has class \code{"cens_prop_fun"} and supports
+S3 methods such as \code{\link[=print]{print()}} and \code{\link[=plot]{plot()}} for summarizing and
+visualizing the censoring model.
 }
 \description{
 \loadmathjax
@@ -119,6 +123,8 @@ f_obj <- estimate_cens_prop(
   time_admin_cens = 10,
   time_accrual = 0,
 )
+
+print(f_obj)
 
 f_obj(0.3)
 }

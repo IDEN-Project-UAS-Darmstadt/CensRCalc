@@ -36,7 +36,8 @@ Suggests:
   usethis,
   covr,
   pkgdown,
-  styler
+  styler,
+  precommit
 Config/testthat/edition: 3
 Language: en-US
 BuildManual: TRUE

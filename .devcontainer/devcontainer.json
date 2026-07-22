@@ -17,7 +17,11 @@
         "packages": "languageserver,remotes"
     },
     "ghcr.io/rocker-org/devcontainer-features/r-dependent-packages:0": {},
-        "ghcr.io/rocker-org/devcontainer-features/r-history:0": {}
+        "ghcr.io/rocker-org/devcontainer-features/r-history:0": {},
+    "ghcr.io/devcontainers/features/python:1": {
+      "installTools": true,
+      "toolsToInstall": "pre-commit"
+    }
   },
 
   "customizations": {
