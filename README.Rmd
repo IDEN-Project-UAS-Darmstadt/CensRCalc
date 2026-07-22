@@ -109,7 +109,7 @@ To publish a new official release:
   it after checks pass.
 4. **Automated Pipeline:** The `release.yaml` workflow triggers on push to
   `main` and will:
-   * Run `renv` restore and execute package checks.
+   * Execute package checks and build the package.
    * Generate the package tarball (`.tar.gz`) and LaTeX PDF Manual (`art/Manual.pdf`).
    * Tag the commit (e.g., `v0.2.0`) and extract release notes from `NEWS.md`.
    * Publish a new GitHub Release with attached build assets.
