@@ -77,13 +77,10 @@ with_progress({
 
 # Development
 
-Restore the development environment with:
+This package comes with a Devcontainer that can be used to develop the package
+in a reproducible environment.
 
-```r
-renv::restore()
-```
-
-Then use anything available in the `devtools` package to develop the package.
+Use anything available in the `devtools` package to develop the package.
 
 ```r
 library(devtools)
