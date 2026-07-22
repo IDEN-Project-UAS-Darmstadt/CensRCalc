@@ -96,6 +96,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Lukas Klein \email{lukas.klein@h-da.de}
   \item Henrik Stahl \email{henrik.stahl@h-da.de}
 }
 

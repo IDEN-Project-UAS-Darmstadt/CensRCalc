@@ -13,7 +13,11 @@
         "vscodeRSupport": true,
         "installDevTools": true
     },
-    "ghcr.io/rocker-org/devcontainer-features/r-dependent-packages:0": {}
+    "ghcr.io/rocker-org/devcontainer-features/r-packages:1": {
+        "packages": "languageserver,remotes"
+    },
+    "ghcr.io/rocker-org/devcontainer-features/r-dependent-packages:0": {},
+        "ghcr.io/rocker-org/devcontainer-features/r-history:0": {}
   },
 
   "customizations": {
@@ -21,6 +25,10 @@
       "settings": {
       },
       "extensions": [
+        "ms-vscode-remote.remote-containers",
+        "REditorSupport.r",
+        "GitHub.vscode-github-actions",
+        "DavidAnson.vscode-markdownlint"
       ]
     }
   }

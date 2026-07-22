@@ -12,7 +12,7 @@ marginal_function <- function(fun, cov_bounds, cov_dens, abs_tol = 1e-6) {
     )
     res$value
   }
-  return(Vectorize(single_t, vectorize.args = "t"))
+  Vectorize(single_t, vectorize.args = "t")
 }
 
 check_surv_fun <- function(
@@ -83,7 +83,7 @@ check_surv_fun <- function(
 
   surv_values <- surv_values[!is.na(surv_values)]
   if (any(surv_values < -abs_tol_buffer) ||
-    any(surv_values > 1 + abs_tol_buffer)) {
+        any(surv_values > 1 + abs_tol_buffer)) {
     return(paste0(
       "Survival function is out of bounds: values must fall within [0, 1] ",
       "(got range [", round(min(surv_values), digits_to_show), ", ",
@@ -118,7 +118,7 @@ check_surv_fun <- function(
       "(got ", round(val_t_min, digits_to_show), ", expected 1)."
     ))
   }
-  return(TRUE)
+  TRUE
 }
 assert_surv_fun <- checkmate::makeAssertionFunction(check_surv_fun)
 
@@ -443,7 +443,7 @@ check_covariate_density_fun <- function(
       round(int_res$value, digits_to_show), ", expected 1)."
     ))
   }
-  return(TRUE)
+  TRUE
 }
 assert_covariate_density_fun <-
   checkmate::makeAssertionFunction(check_covariate_density_fun)
@@ -511,7 +511,7 @@ locate_tail_bound <- function(
     "Returning unconverged horizon."
   )
 
-  return(t)
+  t
 }
 
 survival_fun_safety_wrap <- function(surv_fun, abs_tol_buffer = 1e-2) {
@@ -522,7 +522,7 @@ survival_fun_safety_wrap <- function(surv_fun, abs_tol_buffer = 1e-2) {
     }
     not_missing_res <- res[!is.na(res)]
     if (any(not_missing_res < -abs_tol_buffer) ||
-      any(not_missing_res > 1 + abs_tol_buffer)) {
+          any(not_missing_res > 1 + abs_tol_buffer)) {
       stop("Survival function returned out-of-bounds value.")
     }
     res

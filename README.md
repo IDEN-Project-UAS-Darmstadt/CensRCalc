@@ -74,14 +74,10 @@ with_progress({
 
 # Development
 
-Restore the development environment with:
+This package comes with a Devcontainer that can be used to develop the
+package in a reproducible environment.
 
-``` r
-renv::restore()
-```
-
-Then use anything available in the `devtools` package to develop the
-package.
+Use anything available in the `devtools` package to develop the package.
 
 ``` r
 library(devtools)
@@ -93,4 +89,37 @@ check() # to check the package
 covr::package_coverage() # to check code coverage
 styler::style_pkg() # to style the code
 lint() # to check the code for linting issues
+```
+
+## Releasing a new version
+
+Releases and pre-releases are managed automatically via GitHub Actions
+whenever changes are pushed to `main` or `dev`.
+
+To publish a new official release:
+
+1.  **Prepare on `dev`:** Update the version number in `DESCRIPTION`
+    (e.g., `0.2.0`) and document all changes in `NEWS.md` under a
+    corresponding version heading.
+2.  **Rebuild README:** Run `devtools::build_readme()` to reflect any
+    changes.
+3.  **Merge to `main`:** Open a Pull Request from `dev` to `main` and
+    merge it after checks pass.
+4.  **Automated Pipeline:** The `release.yaml` workflow triggers on push
+    to `main` and will:
+    - Execute package checks and build the package.
+    - Generate the package tarball (`.tar.gz`) and LaTeX PDF Manual
+      (`art/Manual.pdf`).
+    - Tag the commit (e.g., `v0.2.0`) and extract release notes from
+      `NEWS.md`.
+    - Publish a new GitHub Release with attached build assets.
+5.  **Reset `dev`:** Switch back to `dev` and bump to a development
+    version:
+
+``` bash
+git checkout dev
+git pull origin main
+RScript -e "usethis::use_dev_version()"
+git commit -am "Bump to development version"
+git push origin dev
 ```

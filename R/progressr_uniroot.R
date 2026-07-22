@@ -64,5 +64,5 @@ uniroot_with_progress <- function(
     p(step = 100)
   }
 
-  return(results)
+  results
 }

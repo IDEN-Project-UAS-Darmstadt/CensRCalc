@@ -87,6 +87,7 @@ library(devtools)
 document() # to update documentation and roxygen functionality
 load_all() # to load the package functions for development
 build_readme() # to update the README
+build_vignettes() # to build the vignettes
 test() # to run tests
 check() # to check the package
 covr::package_coverage() # to check code coverage

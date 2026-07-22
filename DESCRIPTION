@@ -7,7 +7,7 @@ Authors@R: c(
   person("Lukas", "Klein", email = "lukas.klein@h-da.de", role = c("aut", "cre")),
   person("Antje", "Jahn-Eimermacher", role = "ctb"),
   person("Gunter", "Grieser", role = "ctb"))
-Description:  Provides calculations for the expected censoring
+Description: Provides calculations for the expected censoring
   proportion under independent censoring to determine a
   censoring distribution parameter that achieves a target censoring
   proportion in simulation studies. The expected censoring proportion is evaluated by numerical
@@ -16,7 +16,6 @@ Description:  Provides calculations for the expected censoring
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
 RdMacros: mathjaxr, Rdpack
 Imports: 
   mathjaxr,
@@ -42,3 +41,4 @@ Config/testthat/edition: 3
 Language: en-US
 BuildManual: TRUE
 VignetteBuilder: knitr
+Config/roxygen2/version: 8.0.0

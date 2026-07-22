@@ -150,11 +150,10 @@ integral_with_discr <- function(
     ", errors: ",
     paste(errors, collapse = ", ")
   )
-  res <- list(
+  list(
     value = int_res,
     error = sum(errors),
     int_objects = int_objects,
     errors = errors
   )
-  return(res)
 }
