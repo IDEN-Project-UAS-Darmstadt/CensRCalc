@@ -1,0 +1,96 @@
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+# CensRCalc
+
+<!-- badges: start -->
+
+<!-- badges: end -->
+
+Analytical Censoring Parameter Determination
+
+Provides calculations for the expected censoring proportion under
+independent censoring to determine a censoring distribution parameter
+that achieves a target censoring proportion in simulation studies. The
+expected censoring proportion is evaluated by numerical integration over
+time and covariates, with support for administrative censoring and
+accrual periods.
+
+The documentation is available at
+<https://iden-project-uas-darmstadt.github.io/CensRCalc/>
+
+## Installation
+
+You can install the development version of CensRCalc like so:
+
+``` r
+# With remotes
+remotes::install_github("IDEN-Project-UAS-Darmstadt/CensRCalc")
+# With pak (recommended for speed)
+pak::pkg_install("IDEN-Project-UAS-Darmstadt/CensRCalc")
+```
+
+Releases of the library can be found
+[here](https://github.com/IDEN-Project-UAS-Darmstadt/CensRCalc/releases).
+
+## Examples
+
+This package provides functions to estimate the parameter of the random
+censoring distribution based on a given event time distribution and
+covariate distributions.
+
+``` r
+library(CensRCalc)
+
+event_rate <- function(x, trt) exp(-0.5 + 0.3 * x + 0.2 * trt)
+event_surv <- function(t, x, trt) 1 - pexp(t, rate = event_rate(x, trt))
+cov_dens <- function(x, trt) dnorm(x, mean = 0, sd = 1) * 1 / 2
+cov_bounds <- list(x = c(-Inf, Inf), trt = list(0, 1))
+
+# Default is a exponential censoring distribution
+estimator <- estimate_cens_prop(event_surv, cov_dens, cov_bounds)
+
+# We can now estimate the censoring prop. with different lambda_c values
+sapply(c(0.5, 0.7), estimator)
+#> [1] 0.4289338 0.5105715
+```
+
+We can also find a `lambda_c` that results in a desired censoring
+proportion.
+
+``` r
+library(progressr)
+
+with_progress({
+  lambda_c_50 <- find_cens_param(0.5, event_surv, cov_dens, cov_bounds)
+  print(lambda_c_50)
+})
+#> $parameter
+#> [1] 0.67032
+#> 
+#> $cens_prop
+#> [1] 0.5
+```
+
+# Development
+
+Restore the development environment with:
+
+``` r
+renv::restore()
+```
+
+Then use anything available in the `devtools` package to develop the
+package.
+
+``` r
+library(devtools)
+document() # to update documentation and roxygen functionality
+load_all() # to load the package functions for development
+build_readme() # to update the README
+test() # to run tests
+check() # to check the package
+covr::package_coverage() # to check code coverage
+styler::style_pkg() # to style the code
+lint() # to check the code for linting issues
+```

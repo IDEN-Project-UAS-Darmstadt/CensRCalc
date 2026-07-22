@@ -1,0 +1,9 @@
+docs
+inst/doc
+.RData
+.Rhistory
+.helper
+.DS_Store
+*.Rd2pdf*
+/doc/
+/Meta/

@@ -1,0 +1,44 @@
+Package: CensRCalc
+Title: Analytical Censoring Parameter Determination
+Version: 0.0.0.9000
+URL: https://iden-project-uas-darmstadt.github.io/CensRCalc
+Authors@R: c(
+  person("Henrik", "Stahl", email = "henrik.stahl@h-da.de", role = c("aut")),
+  person("Lukas", "Klein", email = "lukas.klein@h-da.de", role = c("aut", "cre")),
+  person("Antje", "Jahn-Eimermacher", role = "ctb"),
+  person("Gunter", "Grieser", role = "ctb"))
+Description:  Provides calculations for the expected censoring
+  proportion under independent censoring to determine a
+  censoring distribution parameter that achieves a target censoring
+  proportion in simulation studies. The expected censoring proportion is evaluated by numerical
+  integration over time and covariates, with support for
+  administrative censoring and accrual periods.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+RdMacros: mathjaxr, Rdpack
+Imports: 
+  mathjaxr,
+  Rdpack,
+  calculus,
+  logger,
+  checkmate,
+  progressr,
+  methods
+Suggests: 
+  cubature,
+  testthat (>= 3.0.0),
+  lintr,
+  spelling,
+  knitr,
+  rmarkdown,
+  devtools,
+  usethis,
+  covr,
+  pkgdown,
+  styler
+Config/testthat/edition: 3
+Language: en-US
+BuildManual: TRUE
+VignetteBuilder: knitr

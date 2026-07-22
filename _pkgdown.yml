@@ -1,0 +1,18 @@
+url: https://iden-project-uas-darmstadt.github.io/CensRCalc
+template:
+  bootstrap: 5
+  math-rendering: mathjax
+reference:
+- title: Central Information and Functions
+- contents:
+  - CensRCalc
+  - estimate_cens_prop
+  - find_cens_param
+deploy:
+  install_metadata: true
+repo:
+  url:
+    home: https://github.com/IDEN-Project-UAS-Darmstadt/CensRCalc
+    source: https://github.com/IDEN-Project-UAS-Darmstadt/CensRCalc/blob/HEAD/
+    issue: https://github.com/IDEN-Project-UAS-Darmstadt/CensRCalc/issues/
+    user: https://github.com/
