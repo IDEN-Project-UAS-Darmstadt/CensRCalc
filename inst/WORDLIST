@@ -49,3 +49,6 @@ io
 mathjax
 param
 uas
+pandoc
+pkgdown
+sha

@@ -5,11 +5,6 @@ integral_with_discr <- function(
   rel_tol = abs_tol, # We assume values around 1 bec of probabilities/densities
   vectorize = FALSE
 ) {
-  if (!requireNamespace("cubature", quietly = TRUE)) {
-    logger::log_warn(
-      "Package 'cubature' is not installed."
-    )
-  }
   coll <- checkmate::makeAssertCollection()
   checkmate::assert_list(
     bounds,

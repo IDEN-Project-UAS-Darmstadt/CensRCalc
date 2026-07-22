@@ -133,7 +133,7 @@ To publish a new official release:
 ``` bash
 git checkout dev
 git pull origin main
-RScript -e "usethis::use_dev_version()"
+Rscript -e "usethis::use_dev_version()"
 git commit -am "Bump to development version"
 git push origin dev
 ```

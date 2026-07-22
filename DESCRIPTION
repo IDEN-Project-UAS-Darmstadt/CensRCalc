@@ -21,12 +21,12 @@ Imports:
   mathjaxr,
   Rdpack,
   calculus,
+  cubature,
   logger,
   checkmate,
   progressr,
   methods
 Suggests: 
-  cubature,
   testthat (>= 3.0.0),
   lintr,
   spelling,
