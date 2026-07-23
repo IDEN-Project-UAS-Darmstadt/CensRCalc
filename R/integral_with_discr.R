@@ -61,6 +61,10 @@ integral_with_discr <- function(
   int_res <- 0
   int_objects <- list()
 
+  # this is here to check that we can get the right function
+  adapt <- cubature::adaptIntegrate
+  rm(adapt)
+
   integrate_once <- function(fun, bounds) {
     int <- calculus::integral(
       fun,

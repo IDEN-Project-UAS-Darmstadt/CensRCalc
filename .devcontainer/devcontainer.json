@@ -14,7 +14,7 @@
         "installDevTools": true
     },
     "ghcr.io/rocker-org/devcontainer-features/r-packages:1": {
-        "packages": "languageserver,remotes,httpgd"
+        "packages": "languageserver,remotes,httpgd,DT"
     },
     "ghcr.io/rocker-org/devcontainer-features/r-dependent-packages:0": {},
         "ghcr.io/rocker-org/devcontainer-features/r-history:0": {},

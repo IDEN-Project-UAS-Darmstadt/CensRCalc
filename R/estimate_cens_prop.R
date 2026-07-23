@@ -222,7 +222,11 @@ estimate_cens_prop <- function(
       add = coll
     )
   }
-
+  checkmate::assert_function(event_survival,
+    args = c("t", names(covariate_bounds)),
+    nargs = 1 + length(covariate_bounds),
+    add = coll
+  )
   param_span <- target_bounds[2] - target_bounds[1]
   param_margin <- max(param_span * 0.01, 1e-4)
 
@@ -284,15 +288,11 @@ estimate_cens_prop <- function(
   }
 
   dens_admin <- \(t) {
-    if (is.infinite(time_admin_cens) || time_accrual == 0) {
-      rep_len(0, length(t))
-    } else {
-      stats::dunif(
-        t,
-        min = t_start_admin,
-        max = time_admin_cens
-      )
-    }
+    stats::dunif(
+      t,
+      min = t_start_admin,
+      max = time_admin_cens
+    )
   }
 
   integrate_random_cens <- function(event_survival,
@@ -452,6 +452,16 @@ estimate_cens_prop <- function(
     est_cens_prop
   }
   obj <- evaluate_cens_prop
+
+  # rename the first argument of the returned function to the target name
+  old_name <- "target_val"
+  f_args <- formals(obj)
+  names(f_args)[names(f_args) == old_name] <- target
+  formals(obj) <- f_args
+  body(obj) <- do.call(substitute, list(
+    body(obj),
+    stats::setNames(list(as.symbol(target)), old_name)
+  ))
 
   environment(obj)$spec <- list(
     event_survival = event_survival,

@@ -101,6 +101,7 @@ build_site() # to build the pkgdown site
 test() # to run tests
 check() # to check the package
 covr::package_coverage() # to check code coverage
+print(covr::report(browse=F))
 styler::style_pkg() # to style the code
 lint() # to check the code for linting issues
 ```

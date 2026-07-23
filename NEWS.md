@@ -6,6 +6,7 @@
   specific time point $\tau$.
 * Added `plot()` and `print()` methods for the expected censoring proportion
   function.
+* Added tests
 
 ## Minor improvements and bug fixes
 
@@ -19,6 +20,7 @@
   specific time point $\tau$.
 * Added `plot()` and `print()` methods for the expected censoring proportion
   function.
+* Added tests
 
 ## Minor improvements and bug fixes
 
