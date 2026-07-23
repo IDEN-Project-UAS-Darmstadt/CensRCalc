@@ -8,7 +8,7 @@
 \usage{
 \method{print}{cens_prop_fun}(x, ...)
 
-\method{plot}{cens_prop_fun}(x, n = 100, ...)
+\method{plot}{cens_prop_fun}(x, n = 100, tau = NULL, ...)
 }
 \arguments{
 \item{x}{A \code{"cens_prop_fun"} object.}
@@ -16,6 +16,10 @@
 \item{...}{Additional arguments.}
 
 \item{n}{Number of evaluation points.}
+
+\item{tau}{Optional time point for administrative censoring.
+If \code{NULL}, the the censoring proportion is evaluated overall,
+otherwise it is evaluated at the specified time point.}
 }
 \value{
 The input object, invisibly.

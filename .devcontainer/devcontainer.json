@@ -14,7 +14,7 @@
         "installDevTools": true
     },
     "ghcr.io/rocker-org/devcontainer-features/r-packages:1": {
-        "packages": "languageserver,remotes"
+        "packages": "languageserver,remotes,httpgd"
     },
     "ghcr.io/rocker-org/devcontainer-features/r-dependent-packages:0": {},
         "ghcr.io/rocker-org/devcontainer-features/r-history:0": {},
@@ -23,10 +23,12 @@
       "toolsToInstall": "pre-commit"
     }
   },
+  "postCreateCommand": "echo if(file.exists(\"~/.vscode-R/init.R\")) source(\"~/.vscode-R/init.R\") > ~/.Rprofile;  Rscript 'tinytex::install_tinytex()'; echo 'export PATH=\"$HOME/bin:$PATH\"' >> ~/.zshrc; echo 'export PATH=\"$HOME/bin:$PATH\"' >> ~/.bashrc",
 
   "customizations": {
     "vscode": {
       "settings": {
+        "r.plot.useHttpgd": true
       },
       "extensions": [
         "ms-vscode-remote.remote-containers",

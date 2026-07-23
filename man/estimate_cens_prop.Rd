@@ -75,9 +75,11 @@ tail.}
 (e.g., < 0.1).}
 }
 \value{
-A callable function of one numeric scalar (named by \code{target}) that
-returns the expected censoring proportion in \verb{[0,1]} under the supplied
-model components.
+A callable function of one two numeric scalars, one named by \code{target} and
+the other \code{tau}, which returns the expected censoring proportion under the
+specified model components. When \code{tau} is specified, the expected
+censoring proportion is evaluated at the time point \code{tau} instead of
+overall time.
 
 The returned function has class \code{"cens_prop_fun"} and supports
 S3 methods such as \code{\link[=print]{print()}} and \code{\link[=plot]{plot()}} for summarizing and
@@ -125,6 +127,6 @@ f_obj <- estimate_cens_prop(
 )
 
 print(f_obj)
-
 f_obj(0.3)
+f_obj(0.3, tau = 5)
 }

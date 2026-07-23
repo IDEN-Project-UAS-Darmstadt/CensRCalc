@@ -37,6 +37,10 @@
 #' @param cens_prop Numeric scalar in \mjeqn{[0,1]}{[0,1]}. Expected target
 #'   censoring proportion in the simulated data.
 #' @inheritParams estimate_cens_prop
+#' @param tau Numeric scalar. Optional time point at which the expected
+#'  censoring proportion is evaluated. If `NULL`, the expected censoring
+#'  proportion is evaluated overall, otherwise it is evaluated at the specified
+#'  time point.
 #' @param target_bounds Numeric length-2 vector. Lower and upper bounds of
 #'   the search interval for the parameter named in `target`.
 #'
@@ -74,6 +78,7 @@ find_cens_param <- function(
   cens_density = \(t, lambda_c) {
     stats::dexp(t, rate = lambda_c)
   },
+  tau = NULL,
   time_admin_cens = t_max,
   time_accrual = t_min,
   target = "lambda_c",
@@ -89,7 +94,7 @@ find_cens_param <- function(
     len = 1,
     any.missing = FALSE
   )
-  cens_prop_fun <- estimate_cens_prop(
+  cens_prop_fun_no_tau <- estimate_cens_prop(
     event_survival = event_survival,
     covariate_density = covariate_density,
     covariate_bounds = covariate_bounds,
@@ -103,6 +108,7 @@ find_cens_param <- function(
     t_max = t_max,
     abs_tol = abs_tol
   )
+  cens_prop_fun <- partial(cens_prop_fun_no_tau, list(tau = tau))
   result <- uniroot_with_progress(
     fun = cens_prop_fun,
     target = cens_prop,

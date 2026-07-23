@@ -64,9 +64,11 @@
 #'   (e.g., < 0.1).
 #'
 #' @return
-#' A callable function of one numeric scalar (named by `target`) that
-#' returns the expected censoring proportion in `[0,1]` under the supplied
-#' model components.
+#' A callable function of one two numeric scalars, one named by `target` and
+#' the other `tau`, which returns the expected censoring proportion under the
+#' specified model components. When `tau` is specified, the expected
+#' censoring proportion is evaluated at the time point `tau` instead of
+#' overall time.
 #'
 #' The returned function has class `"cens_prop_fun"` and supports
 #' S3 methods such as [print()] and [plot()] for summarizing and
@@ -93,8 +95,8 @@
 #' )
 #'
 #' print(f_obj)
-#'
 #' f_obj(0.3)
+#' f_obj(0.3, tau = 5)
 #' @export
 estimate_cens_prop <- function(
   event_survival,
@@ -125,6 +127,12 @@ estimate_cens_prop <- function(
     types = c("numeric", "list"),
     any.missing = FALSE,
     null.ok = is.null(covariate_density),
+    add = coll
+  )
+  checkmate::assert_character(
+    target,
+    len = 1,
+    any.missing = FALSE,
     add = coll
   )
   checkmate::assert_function(
@@ -261,13 +269,15 @@ estimate_cens_prop <- function(
   }
   checkmate::reportAssertions(coll)
 
+  t_start_admin <- time_admin_cens - time_accrual
+
   surv_admin <- \(t) {
     if (is.infinite(time_admin_cens)) {
       rep_len(1, length(t))
     } else {
       1 - stats::punif(
         t,
-        min = time_admin_cens - time_accrual,
+        min = t_start_admin,
         max = time_admin_cens
       )
     }
@@ -279,7 +289,7 @@ estimate_cens_prop <- function(
     } else {
       stats::dunif(
         t,
-        min = time_admin_cens - time_accrual,
+        min = t_start_admin,
         max = time_admin_cens
       )
     }
@@ -287,10 +297,11 @@ estimate_cens_prop <- function(
 
   integrate_random_cens <- function(event_survival,
                                     cens_density_only_t,
+                                    t_upper_rand,
                                     cov_dens = \(...) 1,
                                     cov_bounds = list()) {
     bounds <- list(
-      t = c(0, time_admin_cens)
+      t = c(t_min, t_upper_rand)
     )
     bounds <- c(bounds, cov_bounds)
     int_res <- integral_with_discr(
@@ -305,7 +316,11 @@ estimate_cens_prop <- function(
       vectorize = TRUE
     )
     logger::log_debug(
-      "Integral during random censoring: ",
+      "Integral during random censoring(bounds: ",
+      paste(sapply(bounds, function(x) paste(x, collapse = ", ")),
+        collapse = "; "
+      ),
+      "): ",
       int_res$value,
       " with error ",
       int_res$error
@@ -315,55 +330,41 @@ estimate_cens_prop <- function(
 
   integrate_admin_cens <- function(event_survival,
                                    cens_survival_only_t,
+                                   t_upper_rand,
                                    cov_dens = \(...) 1,
                                    cov_bounds = list()) {
+    # Admin censoring only has an impact from:
     if (is.infinite(time_admin_cens)) {
       # With no admin censoring, no one will be admin censored
       0
+    } else if (t_start_admin >= t_upper_rand) {
+      # Returns 0 if tau is before the admin censoring window,
+      # or if time_accrual == 0 (where t_start_admin == time_admin_cens)
+      0
     } else {
-      to_integrate <- \(t, ...) {
-        event_survival(t, ...) *
-          cens_survival_only_t(t) *
-          dens_admin(t) *
-          cov_dens(...)
-      }
-      if (time_accrual == 0 && length(cov_bounds) > 0) {
-        # With no accrual, everyone is recruited at time 0
-        int_res <- integral_with_discr(
-          \(...) {
-            to_integrate(time_admin_cens, ...)
-          },
-          bounds = cov_bounds,
-          abs_tol = abs_tol,
-          vectorize = TRUE
-        )
-      } else if (time_accrual == 0 && length(cov_bounds) == 0) {
-        # With no accrual and no covariates, everyone is recruited at time 0
-        int_res <- list(
-          value = event_survival(time_admin_cens) *
-            cens_survival_only_t(time_admin_cens) *
-            dens_admin(time_admin_cens),
-          error = 0
-        )
-      } else {
-        bounds <- list(
-          t = c(time_admin_cens - time_accrual, time_admin_cens)
-        )
-        bounds <- c(bounds, cov_bounds)
-        int_res <- integral_with_discr(
-          \(t, ...) {
-            event_survival(t, ...) *
-              cens_survival_only_t(t) *
-              dens_admin(t) *
-              cov_dens(...)
-          },
-          bounds = bounds,
-          abs_tol = abs_tol,
-          vectorize = TRUE
-        )
-      }
+      bounds <- list(
+        t = c(t_start_admin, t_upper_rand)
+      )
+      bounds <- c(bounds, cov_bounds)
+
+      int_res <- integral_with_discr(
+        \(t, ...) {
+          event_survival(t, ...) *
+            cens_survival_only_t(t) *
+            dens_admin(t) *
+            cov_dens(...)
+        },
+        bounds = bounds,
+        abs_tol = abs_tol,
+        vectorize = TRUE
+      )
+
       logger::log_debug(
-        "Integral during administrative censoring: ",
+        "Integral during administrative censoring(bounds: ",
+        paste(sapply(bounds, function(x) paste(x, collapse = ", ")),
+          collapse = "; "
+        ),
+        "): ",
         int_res$value,
         " with error ",
         int_res$error
@@ -376,6 +377,7 @@ estimate_cens_prop <- function(
   combine_censoring_mechanisms <- function(event_survival,
                                            cens_survival_only_t,
                                            cens_density_only_t,
+                                           t_upper_rand,
                                            cov_dens = \(...) 1,
                                            cov_bounds = list()) {
     event_survival_w <- survival_fun_safety_wrap(event_survival)
@@ -383,15 +385,16 @@ estimate_cens_prop <- function(
     cens_density_only_t_w <- density_fun_safety_wrap(cens_density_only_t)
     cov_dens_w <- density_fun_safety_wrap(cov_dens)
     integrate_random_cens(
-      event_survival_w, cens_density_only_t_w, cov_dens_w, cov_bounds
+      event_survival_w, cens_density_only_t_w, t_upper_rand, cov_dens_w,
+      cov_bounds
     ) +
       integrate_admin_cens(
-        event_survival_w, cens_survival_only_t_w, cov_dens_w,
+        event_survival_w, cens_survival_only_t_w, t_upper_rand, cov_dens_w,
         cov_bounds
       )
   }
 
-  evaluate_cens_prop <- function(target_val) {
+  evaluate_cens_prop <- function(target_val, tau = NULL) {
     checkmate::assert_numeric(
       target_val,
       len = 1,
@@ -400,6 +403,22 @@ estimate_cens_prop <- function(
       lower = target_bounds[1],
       upper = target_bounds[2]
     )
+    checkmate::assert_numeric(
+      tau,
+      len = 1,
+      any.missing = FALSE,
+      finite = TRUE,
+      lower = t_min,
+      upper = t_max,
+      null.ok = TRUE,
+      add = coll
+    )
+    if (is.null(tau)) {
+      # Random censoring only happens up to:
+      t_upper_rand <- time_admin_cens
+    } else {
+      t_upper_rand <- min(tau, time_admin_cens)
+    }
     args <- stats::setNames(list(target_val), target)
     cens_density_only_t <- partial(cens_density, args)
     cens_survival_only_t <- partial(cens_survival, args)
@@ -414,6 +433,7 @@ estimate_cens_prop <- function(
       event_survival,
       cens_survival_only_t,
       cens_density_only_t,
+      t_upper_rand,
       cov_dens,
       cov_bounds
     )
@@ -424,7 +444,10 @@ estimate_cens_prop <- function(
       " = ",
       target_val,
       ": ",
-      est_cens_prop
+      est_cens_prop,
+      " (tau = ",
+      ifelse(is.null(tau), "NULL", tau),
+      ")"
     )
     est_cens_prop
   }

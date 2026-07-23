@@ -96,7 +96,7 @@ library(devtools)
 document() # to update documentation and roxygen functionality
 load_all() # to load the package functions for development
 build_readme() # to update the README
-build_vignettes() # to build the vignettes
+build_vignettes() # to build the vignettes (deprecated, but still works)
 build_site() # to build the pkgdown site
 test() # to run tests
 check() # to check the package

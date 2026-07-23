@@ -81,6 +81,7 @@
 #'
 #' @import mathjaxr
 #' @importFrom Rdpack reprompt
+#' @rdname CensRCalc
 #'
 "_PACKAGE"
 

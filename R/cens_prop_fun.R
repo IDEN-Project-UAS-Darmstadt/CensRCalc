@@ -22,8 +22,11 @@ print.cens_prop_fun <- function(x, ...) {
 
 #' @rdname cens_prop_fun-methods
 #' @param n Number of evaluation points.
+#' @param tau Optional time point for administrative censoring.
+#'  If `NULL`, the the censoring proportion is evaluated overall,
+#'  otherwise it is evaluated at the specified time point.
 #' @export
-plot.cens_prop_fun <- function(x, n = 100, ...) {
+plot.cens_prop_fun <- function(x, n = 100, tau = NULL, ...) {
   spec <- environment(x)$spec
 
   grid <- seq(
@@ -32,14 +35,19 @@ plot.cens_prop_fun <- function(x, n = 100, ...) {
     length.out = n
   )
 
-  values <- vapply(grid, x, numeric(1))
+  values <- vapply(grid, x, numeric(1), tau = tau)
+
+  ylab <- "Expected censoring proportion"
+  if (!is.null(tau)) {
+    ylab <- paste0(ylab, " at tau = ", tau)
+  }
 
   plot(
     grid,
     values,
     type = "l",
     xlab = spec$target,
-    ylab = "Expected censoring proportion",
+    ylab = ylab,
     ...
   )
 

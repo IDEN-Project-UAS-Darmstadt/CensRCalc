@@ -329,3 +329,35 @@ observed_times <- pmin(event_times, censoring_times)
 censoring_indicators <- as.integer(event_times <= censoring_times)
 mean(censoring_indicators == 0)
 ```
+
+Instead of the overall censoring proportion $P(C < T^*)$,
+we can also evaluate the censoring proportion at a specific time point $\tau$
+$P(C < \tau \mid T^* > \tau)=1-S_{C_{\text{obs}}}(t)$.
+
+```{r weibull_exp_cov_acc_adm_tau}
+taus <- seq(0, 30, length.out = 50)
+
+estimator <- estimate_cens_prop(event_surv,
+  covariate_density = cov_dens,
+  covariate_bounds = cov_bounds,
+  time_admin_cens = time_adm,
+  time_accrual = time_acc
+)
+
+cens_p_num <- sapply(taus, \(tau) estimator(lambda_c_50$parameter, tau = tau))
+
+# Based on the simulated data:
+cens_p_sim <- sapply(taus, \(tau) {
+  mean(censoring_indicators == 0 & observed_times <= tau)
+})
+
+plot(taus, cens_p_num,
+  type = "l", col = rgb(0, 0, 1, 0.5), lwd = 2,
+  xlab = "Time", ylab = "Censoring Proportion"
+)
+lines(taus, cens_p_sim, col = rgb(1, 0, 0, 0.5), lwd = 2)
+legend("bottomright",
+  legend = c("Numerical Integration", "Simulation"),
+  col = c(rgb(0, 0, 1, 0.5), rgb(1, 0, 0, 0.5)), lwd = 2
+)
+```

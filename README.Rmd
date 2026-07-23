@@ -45,8 +45,9 @@ Releases of the library can be found
 
 ## Examples
 
-This package provides functions to estimate the parameter of the random censoring distribution based on a
-given event time distribution and covariate distributions.
+This package provides functions to estimate the parameter of the random
+censoring distribution based on a given event time distribution and
+covariate distributions.
 
 ```{r}
 library(CensRCalc)
@@ -92,7 +93,7 @@ library(devtools)
 document() # to update documentation and roxygen functionality
 load_all() # to load the package functions for development
 build_readme() # to update the README
-build_vignettes() # to build the vignettes
+build_vignettes() # to build the vignettes (deprecated, but still works)
 build_site() # to build the pkgdown site
 test() # to run tests
 check() # to check the package

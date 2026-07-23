@@ -15,6 +15,7 @@ find_cens_param(
   cens_density = function(t, lambda_c) {
      stats::dexp(t, rate = lambda_c)
  },
+  tau = NULL,
   time_admin_cens = t_max,
   time_accrual = t_min,
   target = "lambda_c",
@@ -53,6 +54,11 @@ Must be vectorized in \code{t}.}
 \mjeqn{f_{C_{rnd}\mid\lambda_{C_{rnd}}}(t)}{f_C_rnd|lambda_C_rnd(t)}
 with first argument \code{t} and the second argument named as in \code{target}.
 Must be vectorized in \code{t} and be consistent with \code{cens_survival}.}
+
+\item{tau}{Numeric scalar. Optional time point at which the expected
+censoring proportion is evaluated. If \code{NULL}, the expected censoring
+proportion is evaluated overall, otherwise it is evaluated at the specified
+time point.}
 
 \item{time_admin_cens}{Numeric scalar. Administrative censoring time
 \mjeqn{\tau_{adm}}{tau_adm}. Use \code{Inf} for no administrative
