@@ -13,6 +13,7 @@ Description: Provides calculations for the expected censoring
   proportion in simulation studies. The expected censoring proportion is evaluated by numerical
   integration over time and covariates, with support for
   administrative censoring and accrual periods.
+Depends: R (>= 4.1.0)
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
