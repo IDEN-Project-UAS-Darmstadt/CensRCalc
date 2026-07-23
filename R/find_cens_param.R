@@ -9,17 +9,19 @@
 #' supported.
 #'
 #' @details
-#' The parameter \mjeqn{\lambda_{C_{rnd}}}{lambda_C_rnd} is determined by
+#' The parameter \mjeqn{\lambda_{C_{\text{rnd}}}}{lambda_C_rnd} is determined by
 #' solving the root finding problem
 #'
-#' \mjdeqn{P(\delta=0\mid\lambda_{C_{rnd}}) - p_C = 0}{P(delta=0|lambda_C_rnd)
-#' - p_C = 0}
+#' \mjdeqn{P(\delta=0\mid\lambda_{C_{\text{rnd}}}) - p_C = 0}{
+#' P(delta=0|lambda_C_rnd)- p_C = 0}
 #'
-#' where \mjeqn{P(\delta=0\mid\lambda_{C_{rnd}})}{P(delta=0|lambda_C_rnd)}
+#' where \mjeqn{P(\delta=0\mid\lambda_{C_{\text{rnd}}})}{
+#' P(delta=0|lambda_C_rnd)}
 #' is the expected censoring proportion over the covariate distributions and
 #' \mjeqn{p_C\in[0,1]}{p_C in [0,1]} is the target censoring proportion.
-#' The expected censoring proportion \mjeqn{P(\delta=0\mid\lambda_{C_{rnd}})=
-#' E_X\Bigg[P(\delta=0\mid \mathbf{X},\lambda_{C_{rnd}})\Bigg]}{
+#' The expected censoring proportion \mjeqn{P(\delta=0\mid
+#' \lambda_{C_{\text{rnd}}})=
+#' E_X\Bigg[P(\delta=0\mid \mathbf{X},\lambda_{C_{\text{rnd}}})\Bigg]}{
 #' P(delta=0|lambda_C_rnd)=E_X[P(delta=0|X,lambda_C_rnd)} is
 #' evaluated by [estimate_cens_prop()] and its mathematical background is
 #' detailed in the package description ([CensRCalc]). A

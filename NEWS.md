@@ -14,6 +14,7 @@
 * Added evaluation of the passed event survival function, using the marginal.
 * Removed renv usage.
 * Development workflow improvements and fixes.
+* Documentation improvements and fixes.
 
 # CensRCalc 0.0.1.9000
 
@@ -26,8 +27,10 @@
 
 ## Minor improvements and bug fixes
 
+* Added evaluation of the passed event survival function, using the marginal.
 * Removed renv usage.
 * Development workflow improvements and fixes.
+* Documentation improvements and fixes.
 
 # CensRCalc 0.0.1
 

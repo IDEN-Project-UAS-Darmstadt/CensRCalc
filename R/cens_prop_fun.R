@@ -22,8 +22,8 @@ print.cens_prop_fun <- function(x, ...) {
 
 #' @rdname cens_prop_fun-methods
 #' @param n Number of evaluation points.
-#' @param tau Optional time point for administrative censoring.
-#'  If `NULL`, the the censoring proportion is evaluated overall,
+#' @param tau Optional time point for evaluating the expected censoring
+#'  proportion. If `NULL`, the censoring proportion is evaluated overall,
 #'  otherwise it is evaluated at the specified time point.
 #' @export
 plot.cens_prop_fun <- function(x, n = 100, tau = NULL, ...) {

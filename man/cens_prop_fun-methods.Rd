@@ -17,8 +17,8 @@
 
 \item{n}{Number of evaluation points.}
 
-\item{tau}{Optional time point for administrative censoring.
-If \code{NULL}, the the censoring proportion is evaluated overall,
+\item{tau}{Optional time point for evaluating the expected censoring
+proportion. If \code{NULL}, the censoring proportion is evaluated overall,
 otherwise it is evaluated at the specified time point.}
 }
 \value{

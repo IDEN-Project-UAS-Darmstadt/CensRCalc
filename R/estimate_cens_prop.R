@@ -10,13 +10,13 @@
 #' @details
 #' This function returns the expected censoring proportion over the
 #' covariates
-#' \mjeqn{P(\delta=0\mid\lambda_{C_{rnd}})=E_X\Bigg[P(\delta=0\mid
-#' \mathbf{X},\lambda_{C_{rnd}})\Bigg]}{P(delta=0|lambda_C_rnd)=
+#' \mjeqn{P(\delta=0\mid\lambda_{C_{\text{rnd}}})=E_X\Bigg[P(\delta=0\mid
+#' \mathbf{X},\lambda_{C_{\text{rnd}}})\Bigg]}{P(delta=0|lambda_C_rnd)=
 #' E_X[P(delta=0|X,lambda_C_rnd)}
 #' obtained by numerical integration of survival and censoring functions
 #' over time and finally integrating over the covariate distributions. The
 #' mathematical background and the full expression for
-#' \mjeqn{P(\delta=0\mid\lambda_{C_{rnd}})}{P(delta=0|lambda_C_rnd)} are
+#' \mjeqn{P(\delta=0\mid\lambda_{C_{\text{rnd}}})}{P(delta=0|lambda_C_rnd)} are
 #' provided in the package description, see [CensRCalc].
 #'
 #' Functions supplied for time must be vectorized in their first argument
@@ -38,18 +38,20 @@
 #'   discrete variables. Names must match the non-`t` arguments of
 #'   `event_survival`. Must be `NULL` when `covariate_density` is `NULL`.
 #' @param cens_survival Function. Censoring-time survival function
-#'   \mjeqn{S_{C_{rnd}\mid\lambda_{C_{rnd}}}(t)}{S_C_rnd|lambda_C_rnd(t)}
+#'   \mjeqn{S_{C_{\text{rnd}}\mid\lambda_{C_{\text{rnd}}}}(t)}{
+#'   S_C_rnd|lambda_C_rnd(t)}
 #'   with first argument `t` and the second argument named as in `target`.
 #'   Must be vectorized in `t`.
 #' @param cens_density Function. Censoring-time density
-#'   \mjeqn{f_{C_{rnd}\mid\lambda_{C_{rnd}}}(t)}{f_C_rnd|lambda_C_rnd(t)}
+#'   \mjeqn{f_{C_{\text{rnd}}\mid\lambda_{C_{\text{rnd}}}}(t)}{
+#'   f_C_rnd|lambda_C_rnd(t)}
 #'   with first argument `t` and the second argument named as in `target`.
 #'   Must be vectorized in `t` and be consistent with `cens_survival`.
 #' @param time_admin_cens Numeric scalar. Administrative censoring time
-#'   \mjeqn{\tau_{adm}}{tau_adm}. Use `Inf` for no administrative
+#'   \mjeqn{\tau_{\text{adm}}}{tau_adm}. Use `Inf` for no administrative
 #'   censoring.
 #' @param time_accrual Numeric scalar. Accrual time span
-#'   \mjeqn{\tau_{acc}}{tau_acc}. Use `0` for no accrual.
+#'   \mjeqn{\tau_{\text{acc}}}{tau_acc}. Use `0` for no accrual.
 #' @param target Character scalar. Name of the censoring parameter inside
 #'   `cens_survival` and `cens_density` (e.g., `"lambda_c"`).
 #' @param target_bounds Numeric length-2 vector. Lower and upper bounds of
@@ -64,7 +66,7 @@
 #'   (e.g., < 0.1).
 #'
 #' @return
-#' A callable function of one two numeric scalars, one named by `target` and
+#' A callable function of two numeric scalars, one named by `target` and
 #' the other `tau`, which returns the expected censoring proportion under the
 #' specified model components. When `tau` is specified, the expected
 #' censoring proportion is evaluated at the time point `tau` instead of
