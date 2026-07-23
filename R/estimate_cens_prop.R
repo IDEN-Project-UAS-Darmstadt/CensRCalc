@@ -299,7 +299,8 @@ estimate_cens_prop <- function(
                                     cens_density_only_t,
                                     t_upper_rand,
                                     cov_dens = \(...) 1,
-                                    cov_bounds = list()) {
+                                    cov_bounds = list(),
+                                    abs_tol = 1e-6) {
     bounds <- list(
       t = c(t_min, t_upper_rand)
     )
@@ -325,22 +326,23 @@ estimate_cens_prop <- function(
       " with error ",
       int_res$error
     )
-    int_res$value
+    list(value = int_res$value, error = int_res$error)
   }
 
   integrate_admin_cens <- function(event_survival,
                                    cens_survival_only_t,
                                    t_upper_rand,
                                    cov_dens = \(...) 1,
-                                   cov_bounds = list()) {
+                                   cov_bounds = list(),
+                                   abs_tol = 1e-6) {
     # Admin censoring only has an impact from:
     if (is.infinite(time_admin_cens)) {
       # With no admin censoring, no one will be admin censored
-      0
+      list(value = 0, error = 0)
     } else if (t_start_admin >= t_upper_rand) {
       # Returns 0 if tau is before the admin censoring window,
       # or if time_accrual == 0 (where t_start_admin == time_admin_cens)
-      0
+      list(value = 0, error = 0)
     } else {
       bounds <- list(
         t = c(t_start_admin, t_upper_rand)
@@ -369,7 +371,7 @@ estimate_cens_prop <- function(
         " with error ",
         int_res$error
       )
-      int_res$value
+      list(value = int_res$value, error = int_res$error)
     }
   }
 
@@ -384,14 +386,30 @@ estimate_cens_prop <- function(
     cens_survival_only_t_w <- survival_fun_safety_wrap(cens_survival_only_t)
     cens_density_only_t_w <- density_fun_safety_wrap(cens_density_only_t)
     cov_dens_w <- density_fun_safety_wrap(cov_dens)
-    integrate_random_cens(
+    first_tol <- abs_tol / 2
+    irc <- integrate_random_cens(
       event_survival_w, cens_density_only_t_w, t_upper_rand, cov_dens_w,
-      cov_bounds
-    ) +
-      integrate_admin_cens(
-        event_survival_w, cens_survival_only_t_w, t_upper_rand, cov_dens_w,
-        cov_bounds
+      cov_bounds,
+      abs_tol = first_tol
+    )
+    remaining_tol <- max(.Machine$double.eps, abs_tol - irc$error)
+    iac <- integrate_admin_cens(event_survival_w, cens_survival_only_t_w,
+      t_upper_rand, cov_dens_w, cov_bounds,
+      abs_tol = remaining_tol
+    )
+    value <- irc$value + iac$value
+    error <- irc$error + iac$error
+    if (error > abs_tol) {
+      logger::log_warn(
+        "Estimated error ({error}) exceeds requested tolerance ({abs_tol})."
       )
+    }
+    logger::log_debug(
+      "Total censoring proportion: ",
+      irc$value + iac$value,
+      " with error ", irc$error + iac$error
+    )
+    irc$value + iac$value
   }
 
   evaluate_cens_prop <- function(target_val, tau = NULL) {
