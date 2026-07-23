@@ -29,6 +29,7 @@ Imports:
   methods
 Suggests: 
   testthat (>= 3.0.0),
+  withr,
   lintr,
   spelling,
   knitr,

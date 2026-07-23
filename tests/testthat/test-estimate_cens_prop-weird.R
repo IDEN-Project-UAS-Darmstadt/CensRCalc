@@ -8,6 +8,13 @@ cens_dens_valid <- function(t, lambda_c) {
   lambda_c * exp(-lambda_c * t)
 }
 
+helper_error_logging_only <- function(env = parent.frame()) {
+  logger::log_threshold(logger::ERROR, "CensRCalc")
+  withr::defer(logger::log_threshold(logger::INFO, "CensRCalc"), env)
+}
+
+helper_error_logging_only()
+
 test_that("estimate_cens_prop rejects missing required arguments", {
   expect_error(
     estimate_cens_prop(

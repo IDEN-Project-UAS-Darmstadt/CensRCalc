@@ -75,23 +75,25 @@ test_that("Print function works (default params)", {
 test_that("Plot function creates a plot (default params)", {
   event_surv <- \(t) 1 - pexp(t, rate = 0.1)
   estimator <- estimate_cens_prop(event_surv)
-  tmp_file <- tempfile(fileext = ".png")
-  png(tmp_file)
-  expect_silent(plot(estimator))
-  dev.off()
-  # is the file created with some content?
-  expect_true(file.exists(tmp_file))
-  expect_true(file.info(tmp_file)$size > 100)
+  withr::with_tempfile("tmp_file", fileext = ".png", {
+    png(tmp_file)
+    expect_silent(plot(estimator))
+    dev.off()
+    # is the file created with some content?
+    expect_true(file.exists(tmp_file))
+    expect_true(file.info(tmp_file)$size > 100)
+  })
 })
 
 test_that("Plot function creates a plot (tau)", {
   event_surv <- \(t) 1 - pexp(t, rate = 0.1)
   estimator <- estimate_cens_prop(event_surv)
-  tmp_file <- tempfile(fileext = ".png")
-  png(tmp_file)
-  expect_silent(plot(estimator, tau = 5))
-  dev.off()
-  # is the file created with some content?
-  expect_true(file.exists(tmp_file))
-  expect_true(file.info(tmp_file)$size > 100)
+  withr::with_tempfile("tmp_file", fileext = ".png", {
+    png(tmp_file)
+    expect_silent(plot(estimator, tau = 5))
+    dev.off()
+    # is the file created with some content?
+    expect_true(file.exists(tmp_file))
+    expect_true(file.info(tmp_file)$size > 100)
+  })
 })
