@@ -86,6 +86,8 @@ integral_with_discr <- function(
         bounds = bounds
       )
     }
+    # the error is relative, we want absolute
+    int$error <- int$value * int$error
     logger::log_trace(
       "Integral result: ",
       int$value,
