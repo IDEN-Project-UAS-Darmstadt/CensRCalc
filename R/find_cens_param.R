@@ -9,18 +9,20 @@
 #' supported.
 #'
 #' @details
-#' The parameter \mjeqn{\lambda_{C_{rnd}}}{lambda_C_rnd} is determined by
+#' The parameter \mjeqn{\lambda_{C_{\text{rnd}}}}{lambda_C_rnd} is determined by
 #' solving the root finding problem
 #'
-#' \mjdeqn{P(\delta=0\mid\lambda_{C_{rnd}}) - p_C = 0}{P(delta=0|lambda_C_rnd)
-#' - p_C = 0}
+#' \mjdeqn{P(\delta=0\mid\lambda_{C_{\text{rnd}}}) - p_C = 0}{
+#' P(delta=0|lambda_C_rnd)- p_C = 0}
 #'
-#' where \mjeqn{P(\delta=0\mid\lambda_{C_{rnd}})}{P(delta=0|lambda_C_rnd)}
+#' where \mjeqn{P(\delta=0\mid\lambda_{C_{\text{rnd}}})}{
+#' P(delta=0|lambda_C_rnd)}
 #' is the expected censoring proportion over the covariate distributions and
 #' \mjeqn{p_C\in[0,1]}{p_C in [0,1]} is the target censoring proportion.
-#' The expected censoring proportion \mjeqn{P(\delta=0\mid\lambda_{C_{rnd}})=
-#' E_X\Bigg[P(\delta=0\mid \mathbf{X},\lambda_{C_{rnd}})\Bigg]}{
-#' P(delta=0|lambda_C_rnd)=E_X[P(delta=0|X,lambda_C_rnd)} is
+#' The expected censoring proportion \mjeqn{P(\delta=0\mid
+#' \lambda_{C_{\text{rnd}}})=
+#' E_X\left[P(\delta=0\mid \mathbf{X},\lambda_{C_{\text{rnd}}})\right]}{
+#' P(delta=0|lambda_C_rnd)=E_X[P(delta=0|X,lambda_C_rnd)]} is
 #' evaluated by [estimate_cens_prop()] and its mathematical background is
 #' detailed in the package description ([CensRCalc]). A
 #' bracketing root finder is used with the interval given by `target_bounds`.
@@ -37,6 +39,10 @@
 #' @param cens_prop Numeric scalar in \mjeqn{[0,1]}{[0,1]}. Expected target
 #'   censoring proportion in the simulated data.
 #' @inheritParams estimate_cens_prop
+#' @param tau Numeric scalar. Optional time point at which the expected
+#'  censoring proportion is evaluated. If `NULL`, the expected censoring
+#'  proportion is evaluated overall, otherwise it is evaluated at the specified
+#'  time point.
 #' @param target_bounds Numeric length-2 vector. Lower and upper bounds of
 #'   the search interval for the parameter named in `target`.
 #'
@@ -74,6 +80,7 @@ find_cens_param <- function(
   cens_density = \(t, lambda_c) {
     stats::dexp(t, rate = lambda_c)
   },
+  tau = NULL,
   time_admin_cens = t_max,
   time_accrual = t_min,
   target = "lambda_c",
@@ -89,7 +96,7 @@ find_cens_param <- function(
     len = 1,
     any.missing = FALSE
   )
-  cens_prop_fun <- estimate_cens_prop(
+  cens_prop_fun_no_tau <- estimate_cens_prop(
     event_survival = event_survival,
     covariate_density = covariate_density,
     covariate_bounds = covariate_bounds,
@@ -103,6 +110,7 @@ find_cens_param <- function(
     t_max = t_max,
     abs_tol = abs_tol
   )
+  cens_prop_fun <- partial(cens_prop_fun_no_tau, list(tau = tau))
   result <- uniroot_with_progress(
     fun = cens_prop_fun,
     target = cens_prop,

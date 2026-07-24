@@ -5,11 +5,6 @@ integral_with_discr <- function(
   rel_tol = abs_tol, # We assume values around 1 bec of probabilities/densities
   vectorize = FALSE
 ) {
-  if (!requireNamespace("cubature", quietly = TRUE)) {
-    logger::log_warn(
-      "Package 'cubature' is not installed."
-    )
-  }
   coll <- checkmate::makeAssertCollection()
   checkmate::assert_list(
     bounds,
@@ -57,16 +52,20 @@ integral_with_discr <- function(
   checkmate::assert_flag(vectorize, add = coll)
   checkmate::reportAssertions(coll)
 
+  tol_floor <- max(abs_tol * 0.01, 1e-12)
   is_cont <- vapply(bounds, is.numeric, logical(1))
   continuous <- bounds[is_cont]
   checkmate::qassertr(continuous, "N2", .var.name = "bounds (continuous part)")
   discrete <- bounds[!is_cont]
   checkmate::qassertr(discrete, "L+", .var.name = "bounds (discrete part)")
 
-  int_res <- 0
   int_objects <- list()
 
-  integrate_once <- function(fun, bounds) {
+  # this is here to check that we can get the right function
+  adapt <- cubature::adaptIntegrate
+  rm(adapt)
+
+  integrate_once <- function(fun, bounds, abs_tol, rel_tol) {
     int <- calculus::integral(
       fun,
       bounds = bounds,
@@ -97,8 +96,7 @@ integral_with_discr <- function(
   }
 
   if (length(discrete) == 0 && length(continuous) > 0) {
-    int <- integrate_once(fun, continuous)
-    int_res <- int$value
+    int <- integrate_once(fun, continuous, abs_tol, rel_tol)
     int_objects <- list(int)
   } else {
     discrete_args_transformed <- list()
@@ -122,6 +120,7 @@ integral_with_discr <- function(
       stringsAsFactors = FALSE
     )
     n_ints <- nrow(cart_product)
+    remaining_abs_tol <- abs_tol
 
     int_objects <- vector("list", n_ints)
     for (i in seq_len(n_ints)) {
@@ -134,11 +133,25 @@ integral_with_discr <- function(
           error = 0,
           message = "No integration, only discrete"
         )
-        int_res <- int_res + int$value
         int_objects[[i]] <- int
       } else {
-        int <- integrate_once(fun_part, continuous)
-        int_res <- int_res + int$value
+        cur_abs_tol <- remaining_abs_tol / (n_ints - i + 1)
+        logger::log_trace("Integrating with absolute tolerance: ", cur_abs_tol)
+        int <- integrate_once(fun_part, continuous, cur_abs_tol, rel_tol)
+        if (int$error > cur_abs_tol) {
+          logger::log_warn(
+            "Integration error of ",
+            int$error,
+            " exceeds allocated absolute tolerance of ",
+            cur_abs_tol
+          )
+        }
+
+        remaining_abs_tol <- max(
+          tol_floor,
+          remaining_abs_tol - int$error
+        )
+        logger::log_trace("Remaining absolute tolerance: ", remaining_abs_tol)
         int_objects[[i]] <- int
       }
     }
@@ -150,11 +163,21 @@ integral_with_discr <- function(
     ", errors: ",
     paste(errors, collapse = ", ")
   )
-  res <- list(
+  total_error <- sum(errors)
+  if (total_error > abs_tol) {
+    logger::log_warn(
+      "Total error of ",
+      total_error,
+      " exceeds absolute tolerance of ",
+      abs_tol
+    )
+  }
+  values <- vapply(int_objects, `[[`, numeric(1), "value")
+  int_res <- sum(values)
+  list(
     value = int_res,
-    error = sum(errors),
+    error = total_error,
     int_objects = int_objects,
     errors = errors
   )
-  return(res)
 }

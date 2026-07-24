@@ -437,9 +437,9 @@ dataset, independent of the covariates of a specific subject:
 In the last step we can calculate the parameter $\lambda_{C_{rnd}}$:
 \begin{align*}
     &P(\delta=0\mid\lambda_{C_{\text{rnd}}}) \overset{!}{=} 0.3 \\
-    &\Leftrightarrow \frac{3}{4 \lambda_{C_{rnd}}} = 0.3 \\
-    &\Leftrightarrow \frac{3}{4 \cdot 0.3} = \lambda_{C_{rnd}} \\
-    &\Leftrightarrow \lambda_{C_{rnd}} = \frac{30}{12} = 2.5
+    &\leftrightarrow \frac{3}{4 \lambda_{C_{rnd}}} = 0.3 \\
+    &\leftrightarrow \frac{3}{4 \cdot 0.3} = \lambda_{C_{rnd}} \\
+    &\leftrightarrow \lambda_{C_{rnd}} = \frac{30}{12} = 2.5
 \end{align*}
 
 ## Session Info

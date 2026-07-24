@@ -27,15 +27,13 @@ jobs:
         env:
           # install full prebuilt version
           TINYTEX_INSTALLER: TinyTeX
-      - uses: r-lib/actions/setup-renv@v2
+      - uses: r-lib/actions/setup-r-dependencies@v2
       - name: build
         run: |
-          Rscript -e 'renv::status()'
           mkdir art
           tlmgr update --self
           tlmgr install makeindex titling framed inconsolata collection-fontsrecommended
           Rscript -e 'devtools::build(path="art")'
-          Rscript -e "renv::install('.')"
           Rscript -e 'x <- callr::rcmd("Rd2pdf", cmdargs=c("--force","--output=art/Manual.pdf", "--no-clean", "."), show=TRUE, stderr = "2>&1")' 
       - name: version
         run: |

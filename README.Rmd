@@ -45,8 +45,9 @@ Releases of the library can be found
 
 ## Examples
 
-This package provides functions to estimate the parameter of the random censoring distribution based on a
-given event time distribution and covariate distributions.
+This package provides functions to estimate the parameter of the random
+censoring distribution based on a given event time distribution and
+covariate distributions.
 
 ```{r}
 library(CensRCalc)
@@ -63,12 +64,15 @@ estimator <- estimate_cens_prop(event_surv, cov_dens, cov_bounds)
 sapply(c(0.5, 0.7), estimator)
 ```
 
+```{r}
+print(estimator)
+plot(estimator)
+```
+
 We can also find a `lambda_c` that results in a desired censoring proportion.
 
 ```{r}
-library(progressr)
-
-with_progress({
+progressr::with_progress({ # Progress bar is optional
   lambda_c_50 <- find_cens_param(0.5, event_surv, cov_dens, cov_bounds)
   print(lambda_c_50)
 })
@@ -77,22 +81,23 @@ with_progress({
 
 # Development
 
-Restore the development environment with:
+This package comes with a Devcontainer that can be used to develop the package
+in a reproducible environment.
 
-```r
-renv::restore()
-```
-
-Then use anything available in the `devtools` package to develop the package.
+Use anything available in the `devtools` package to develop the package.
 
 ```r
 library(devtools)
 document() # to update documentation and roxygen functionality
 load_all() # to load the package functions for development
 build_readme() # to update the README
+build_vignettes() # to build the vignettes (deprecated, but still works)
+build_site() # to build the pkgdown site
+build_manual(path=".") # to build the PDF manual
 test() # to run tests
 check() # to check the package
 covr::package_coverage() # to check code coverage
+print(covr::report(browse=F))
 styler::style_pkg() # to style the code
 lint() # to check the code for linting issues
 ```
@@ -112,7 +117,7 @@ To publish a new official release:
   it after checks pass.
 4. **Automated Pipeline:** The `release.yaml` workflow triggers on push to
   `main` and will:
-   * Run `renv` restore and execute package checks.
+   * Execute package checks and build the package.
    * Generate the package tarball (`.tar.gz`) and LaTeX PDF Manual (`art/Manual.pdf`).
    * Tag the commit (e.g., `v0.2.0`) and extract release notes from `NEWS.md`.
    * Publish a new GitHub Release with attached build assets.
@@ -121,7 +126,7 @@ To publish a new official release:
 ```bash
 git checkout dev
 git pull origin main
-RScript -e "usethis::use_dev_version()"
+Rscript -e "usethis::use_dev_version()"
 git commit -am "Bump to development version"
 git push origin dev
 ```

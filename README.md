@@ -9,12 +9,12 @@
 
 Analytical Censoring Parameter Determination
 
-Provides calculations for the expected censoring proportion under
-independent censoring to determine a censoring distribution parameter
-that achieves a target censoring proportion in simulation studies. The
-expected censoring proportion is evaluated by numerical integration over
-time and covariates, with support for administrative censoring and
-accrual periods.
+Calculations for the expected censoring proportion under independent
+censoring to determine a censoring distribution parameter that achieves
+a target censoring proportion in simulation studies. The expected
+censoring proportion is evaluated by numerical integration over time and
+covariates, with support for administrative censoring and accrual
+periods.
 
 The documentation is available at
 <https://iden-project-uas-darmstadt.github.io/CensRCalc/>
@@ -52,21 +52,31 @@ estimator <- estimate_cens_prop(event_surv, cov_dens, cov_bounds)
 
 # We can now estimate the censoring prop. with different lambda_c values
 sapply(c(0.5, 0.7), estimator)
-#> [1] 0.4289338 0.5105715
+#> [1] 0.4289339 0.5105715
 ```
+
+``` r
+print(estimator)
+#> <Expected censoring proportion function>
+#> Target parameter : lambda_c 
+#> Target range     : 1e-05 - 5 
+#> Administrative censoring: Inf 
+#> Accrual period   : 0
+plot(estimator)
+```
+
+<img src="man/figures/README-unnamed-chunk-4-1.png" alt="" width="100%" />
 
 We can also find a `lambda_c` that results in a desired censoring
 proportion.
 
 ``` r
-library(progressr)
-
-with_progress({
+progressr::with_progress({ # Progress bar is optional
   lambda_c_50 <- find_cens_param(0.5, event_surv, cov_dens, cov_bounds)
   print(lambda_c_50)
 })
 #> $parameter
-#> [1] 0.67032
+#> [1] 0.6703201
 #> 
 #> $cens_prop
 #> [1] 0.5
@@ -74,23 +84,56 @@ with_progress({
 
 # Development
 
-Restore the development environment with:
+This package comes with a Devcontainer that can be used to develop the
+package in a reproducible environment.
 
-``` r
-renv::restore()
-```
-
-Then use anything available in the `devtools` package to develop the
-package.
+Use anything available in the `devtools` package to develop the package.
 
 ``` r
 library(devtools)
 document() # to update documentation and roxygen functionality
 load_all() # to load the package functions for development
 build_readme() # to update the README
+build_vignettes() # to build the vignettes (deprecated, but still works)
+build_site() # to build the pkgdown site
+build_manual(path=".") # to build the PDF manual
 test() # to run tests
 check() # to check the package
 covr::package_coverage() # to check code coverage
+print(covr::report(browse=F))
 styler::style_pkg() # to style the code
 lint() # to check the code for linting issues
+```
+
+## Releasing a new version
+
+Releases and pre-releases are managed automatically via GitHub Actions
+whenever changes are pushed to `main` or `dev`.
+
+To publish a new official release:
+
+1.  **Prepare on `dev`:** Update the version number in `DESCRIPTION`
+    (e.g., `0.2.0`) and document all changes in `NEWS.md` under a
+    corresponding version heading.
+2.  **Rebuild README:** Run `devtools::build_readme()` to reflect any
+    changes.
+3.  **Merge to `main`:** Open a Pull Request from `dev` to `main` and
+    merge it after checks pass.
+4.  **Automated Pipeline:** The `release.yaml` workflow triggers on push
+    to `main` and will:
+    - Execute package checks and build the package.
+    - Generate the package tarball (`.tar.gz`) and LaTeX PDF Manual
+      (`art/Manual.pdf`).
+    - Tag the commit (e.g., `v0.2.0`) and extract release notes from
+      `NEWS.md`.
+    - Publish a new GitHub Release with attached build assets.
+5.  **Reset `dev`:** Switch back to `dev` and bump to a development
+    version:
+
+``` bash
+git checkout dev
+git pull origin main
+Rscript -e "usethis::use_dev_version()"
+git commit -am "Bump to development version"
+git push origin dev
 ```
