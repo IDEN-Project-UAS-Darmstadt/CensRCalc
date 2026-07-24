@@ -48,6 +48,8 @@ uniroot_with_progress <- function(
           ")"
         )
         p(message, amount = add_progress)
+        state$last_reported_progress <- progress_percent +
+          state$last_reported_progress
       }
     }
     state$last_val <- target_val
