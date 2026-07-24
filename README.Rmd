@@ -72,9 +72,7 @@ plot(estimator)
 We can also find a `lambda_c` that results in a desired censoring proportion.
 
 ```{r}
-library(progressr)
-
-with_progress({ # Progress bar is optional
+progressr::with_progress({ # Progress bar is optional
   lambda_c_50 <- find_cens_param(0.5, event_surv, cov_dens, cov_bounds)
   print(lambda_c_50)
 })

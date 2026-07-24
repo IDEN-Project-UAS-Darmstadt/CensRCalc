@@ -2,7 +2,7 @@
 #'
 #' @description
 #' \loadmathjax
-#' Provides calculations for the expected censoring
+#' Calculations for the expected censoring
 #' proportion under independent censoring to determine a
 #' censoring distribution parameter that achieves a target censoring
 #' proportion in simulation studies. The expected censoring proportion is

@@ -8,7 +8,7 @@ Authors@R: c(
   person("Lukas", "Klein", email = "lukas.klein@h-da.de", role = c("aut", "cre")),
   person("Antje", "Jahn-Eimermacher", role = "ctb"),
   person("Gunter", "Grieser", role = "ctb"))
-Description: Provides calculations for the expected censoring
+Description: Calculations for the expected censoring
   proportion under independent censoring to determine a
   censoring distribution parameter that achieves a target censoring
   proportion in simulation studies. The expected censoring proportion is evaluated by numerical

@@ -9,12 +9,12 @@
 
 Analytical Censoring Parameter Determination
 
-Provides calculations for the expected censoring proportion under
-independent censoring to determine a censoring distribution parameter
-that achieves a target censoring proportion in simulation studies. The
-expected censoring proportion is evaluated by numerical integration over
-time and covariates, with support for administrative censoring and
-accrual periods.
+Calculations for the expected censoring proportion under independent
+censoring to determine a censoring distribution parameter that achieves
+a target censoring proportion in simulation studies. The expected
+censoring proportion is evaluated by numerical integration over time and
+covariates, with support for administrative censoring and accrual
+periods.
 
 The documentation is available at
 <https://iden-project-uas-darmstadt.github.io/CensRCalc/>
@@ -71,9 +71,7 @@ We can also find a `lambda_c` that results in a desired censoring
 proportion.
 
 ``` r
-library(progressr)
-
-with_progress({ # Progress bar is optional
+progressr::with_progress({ # Progress bar is optional
   lambda_c_50 <- find_cens_param(0.5, event_surv, cov_dens, cov_bounds)
   print(lambda_c_50)
 })
