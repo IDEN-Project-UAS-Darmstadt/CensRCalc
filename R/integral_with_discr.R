@@ -52,6 +52,7 @@ integral_with_discr <- function(
   checkmate::assert_flag(vectorize, add = coll)
   checkmate::reportAssertions(coll)
 
+  tol_floor <- max(abs_tol * 0.01, 1e-12)
   is_cont <- vapply(bounds, is.numeric, logical(1))
   continuous <- bounds[is_cont]
   checkmate::qassertr(continuous, "N2", .var.name = "bounds (continuous part)")
@@ -145,8 +146,9 @@ integral_with_discr <- function(
             cur_abs_tol
           )
         }
+
         remaining_abs_tol <- max(
-          .Machine$double.eps,
+          tol_floor,
           remaining_abs_tol - int$error
         )
         logger::log_trace("Remaining absolute tolerance: ", remaining_abs_tol)

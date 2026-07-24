@@ -21,8 +21,8 @@
 #' \mjeqn{p_C\in[0,1]}{p_C in [0,1]} is the target censoring proportion.
 #' The expected censoring proportion \mjeqn{P(\delta=0\mid
 #' \lambda_{C_{\text{rnd}}})=
-#' E_X\Bigg[P(\delta=0\mid \mathbf{X},\lambda_{C_{\text{rnd}}})\Bigg]}{
-#' P(delta=0|lambda_C_rnd)=E_X[P(delta=0|X,lambda_C_rnd)} is
+#' E_X\left[P(\delta=0\mid \mathbf{X},\lambda_{C_{\text{rnd}}})\right]}{
+#' P(delta=0|lambda_C_rnd)=E_X[P(delta=0|X,lambda_C_rnd)]} is
 #' evaluated by [estimate_cens_prop()] and its mathematical background is
 #' detailed in the package description ([CensRCalc]). A
 #' bracketing root finder is used with the interval given by `target_bounds`.

@@ -181,7 +181,7 @@ We have a lognormal distributed event time with parameters $\mu_{T^*} = 6$ and
 $\sigma_{T^*} = 1.1$, that is
 
 $$
-T^* \sim \text{LN}(\mu_{T^*}, \sigma_{T^*}) \Leftrightarrow 
+T^* \sim \text{LN}(\mu_{T^*}, \sigma_{T^*}) \leftrightarrow 
 \ln(T^*) \sim \text{N}(\mu_{T^*}, \sigma_{T^*}).
 $$
 

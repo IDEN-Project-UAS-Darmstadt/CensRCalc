@@ -60,8 +60,8 @@
 #'
 #' Next we take the expectation over the covariate distribution to get the
 #' expected censoring proportion:
-#' \mjdeqn{P(\delta=0\mid\lambda_{C_{\text{rnd}}})=E_X\Bigg[P(\delta=0\mid
-#' \mathbf{X},\lambda_{C_{\text{rnd}}})\Bigg].}{P(delta=0|lambda_C_rnd)=
+#' \mjdeqn{P(\delta=0\mid\lambda_{C_{\text{rnd}}})=E_X\left[P(\delta=0\mid
+#' \mathbf{X},\lambda_{C_{\text{rnd}}})\right].}{P(delta=0|lambda_C_rnd)=
 #' E_X[P(delta=0|X,lambda_C_rnd)].} This is implemented in
 #' [estimate_cens_prop()]. To obtain the censoring parameter
 #' \mjeqn{\lambda_{C_{\text{rnd}}}}{lambda_C_rnd}
@@ -82,6 +82,7 @@
 #' @import mathjaxr
 #' @importFrom Rdpack reprompt
 #' @rdname CensRCalc
+#' @name CensRCalc
 #'
 "_PACKAGE"
 

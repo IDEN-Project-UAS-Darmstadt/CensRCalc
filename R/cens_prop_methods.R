@@ -3,10 +3,12 @@
 #' @param x A `"cens_prop_fun"` object.
 #' @param ... Additional arguments.
 #' @return The input object, invisibly.
-#' @name cens_prop_fun-methods
+#' @rdname cens_prop_methods
+#' @aliases cens_prop_methods
+#' @name S3 methods for cens_prop_fun
 NULL
 
-#' @rdname cens_prop_fun-methods
+#' @rdname cens_prop_methods
 #' @export
 print.cens_prop_fun <- function(x, ...) {
   spec <- environment(x)$spec
@@ -20,7 +22,7 @@ print.cens_prop_fun <- function(x, ...) {
   invisible(x)
 }
 
-#' @rdname cens_prop_fun-methods
+#' @rdname cens_prop_methods
 #' @param n Number of evaluation points.
 #' @param tau Optional time point for evaluating the expected censoring
 #'  proportion. If `NULL`, the censoring proportion is evaluated overall,

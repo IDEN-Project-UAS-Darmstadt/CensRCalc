@@ -67,7 +67,7 @@ time point.}
 censoring.}
 
 \item{time_accrual}{Numeric scalar. Accrual time span
-\mjeqn{\tau_{\text{acc}}}{tau_acc}. Use \code{0} for no accrual.}
+\mjeqn{\tau_{\text{acc}}}{tau_acc}. Use \code{0} for no accrual (default).}
 
 \item{target}{Character scalar. Name of the censoring parameter inside
 \code{cens_survival} and \code{cens_density} (e.g., \code{"lambda_c"}).}
@@ -115,8 +115,8 @@ is the expected censoring proportion over the covariate distributions and
 \mjeqn{p_C\in[0,1]}{p_C in [0,1]} is the target censoring proportion.
 The expected censoring proportion \mjeqn{P(\delta=0\mid
 \lambda_{C_{\text{rnd}}})=
-E_X\Bigg[P(\delta=0\mid \mathbf{X},\lambda_{C_{\text{rnd}}})\Bigg]}{
-P(delta=0|lambda_C_rnd)=E_X[P(delta=0|X,lambda_C_rnd)} is
+E_X\left[P(\delta=0\mid \mathbf{X},\lambda_{C_{\text{rnd}}})\right]}{
+P(delta=0|lambda_C_rnd)=E_X[P(delta=0|X,lambda_C_rnd)]} is
 evaluated by \code{\link[=estimate_cens_prop]{estimate_cens_prop()}} and its mathematical background is
 detailed in the package description (\link{CensRCalc}). A
 bracketing root finder is used with the interval given by \code{target_bounds}.

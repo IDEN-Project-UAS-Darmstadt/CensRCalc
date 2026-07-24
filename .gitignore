@@ -7,3 +7,4 @@ inst/doc
 *.Rd2pdf*
 /doc/
 /Meta/
+*.pdf

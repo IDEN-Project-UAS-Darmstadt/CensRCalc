@@ -1,3 +1,4 @@
+^.+\.pdf$
 ^LICENSE\.md$
 ^Meta$
 ^README\.Rmd$

@@ -52,7 +52,7 @@ estimator <- estimate_cens_prop(event_surv, cov_dens, cov_bounds)
 
 # We can now estimate the censoring prop. with different lambda_c values
 sapply(c(0.5, 0.7), estimator)
-#> [1] 0.4289338 0.5105715
+#> [1] 0.4289339 0.5105715
 ```
 
 ``` r
@@ -78,7 +78,7 @@ with_progress({ # Progress bar is optional
   print(lambda_c_50)
 })
 #> $parameter
-#> [1] 0.67032
+#> [1] 0.6703201
 #> 
 #> $cens_prop
 #> [1] 0.5
@@ -98,6 +98,7 @@ load_all() # to load the package functions for development
 build_readme() # to update the README
 build_vignettes() # to build the vignettes (deprecated, but still works)
 build_site() # to build the pkgdown site
+build_manual(path=".") # to build the PDF manual
 test() # to run tests
 check() # to check the package
 covr::package_coverage() # to check code coverage

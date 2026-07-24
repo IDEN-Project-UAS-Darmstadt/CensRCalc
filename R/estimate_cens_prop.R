@@ -10,8 +10,8 @@
 #' @details
 #' This function returns the expected censoring proportion over the
 #' covariates
-#' \mjeqn{P(\delta=0\mid\lambda_{C_{\text{rnd}}})=E_X\Bigg[P(\delta=0\mid
-#' \mathbf{X},\lambda_{C_{\text{rnd}}})\Bigg]}{P(delta=0|lambda_C_rnd)=
+#' \mjeqn{P(\delta=0\mid\lambda_{C_{\text{rnd}}})=E_X\left[P(\delta=0\mid
+#' \mathbf{X},\lambda_{C_{\text{rnd}}})\right]}{P(delta=0|lambda_C_rnd)=
 #' E_X[P(delta=0|X,lambda_C_rnd)}
 #' obtained by numerical integration of survival and censoring functions
 #' over time and finally integrating over the covariate distributions. The
@@ -51,7 +51,7 @@
 #'   \mjeqn{\tau_{\text{adm}}}{tau_adm}. Use `Inf` for no administrative
 #'   censoring.
 #' @param time_accrual Numeric scalar. Accrual time span
-#'   \mjeqn{\tau_{\text{acc}}}{tau_acc}. Use `0` for no accrual.
+#'   \mjeqn{\tau_{\text{acc}}}{tau_acc}. Use `0` for no accrual (default).
 #' @param target Character scalar. Name of the censoring parameter inside
 #'   `cens_survival` and `cens_density` (e.g., `"lambda_c"`).
 #' @param target_bounds Numeric length-2 vector. Lower and upper bounds of
@@ -73,7 +73,8 @@
 #' overall time.
 #'
 #' The returned function has class `"cens_prop_fun"` and supports
-#' S3 methods such as [print()] and [plot()] for summarizing and
+#' S3 methods such as \code{\link[=print.cens_prop_fun]{print()}} and
+#' \code{\link[=plot.cens_prop_fun]{plot()}} for summarizing and
 #' visualizing the censoring model.
 #'
 #' @import mathjaxr
@@ -111,7 +112,7 @@ estimate_cens_prop <- function(
     stats::dexp(t, rate = lambda_c)
   },
   time_admin_cens = t_max,
-  time_accrual = t_min,
+  time_accrual = 0,
   target = "lambda_c",
   target_bounds = c(1e-5, 5),
   t_min = 0,
@@ -131,10 +132,10 @@ estimate_cens_prop <- function(
     null.ok = is.null(covariate_density),
     add = coll
   )
-  checkmate::assert_character(
+  checkmate::assert_string(
     target,
-    len = 1,
-    any.missing = FALSE,
+    min.chars = 1,
+    pattern = "^[a-zA-Z_.][a-zA-Z0-9_.]*$",
     add = coll
   )
   checkmate::assert_function(
@@ -151,7 +152,8 @@ estimate_cens_prop <- function(
   )
   checkmate::assert_numeric(
     time_accrual,
-    lower = t_min, upper = time_admin_cens,
+    lower = 0, # This is a relative time, so it does not need to check t_min
+    upper = Inf,
     finite = TRUE,
     len = 1,
     any.missing = FALSE,
@@ -159,7 +161,7 @@ estimate_cens_prop <- function(
   )
   checkmate::assert_numeric(
     time_admin_cens,
-    lower = time_accrual, upper = t_max,
+    lower = t_min, upper = t_max,
     finite = FALSE,
     len = 1,
     any.missing = FALSE,
@@ -280,12 +282,10 @@ estimate_cens_prop <- function(
   surv_admin <- \(t) {
     if (is.infinite(time_admin_cens)) {
       rep_len(1, length(t))
+    } else if (time_accrual == 0) {
+      as.numeric(t < time_admin_cens)
     } else {
-      1 - stats::punif(
-        t,
-        min = t_start_admin,
-        max = time_admin_cens
-      )
+      1 - stats::punif(t, min = t_start_admin, max = time_admin_cens)
     }
   }
 
@@ -394,7 +394,8 @@ estimate_cens_prop <- function(
       cov_bounds,
       abs_tol = first_tol
     )
-    remaining_tol <- max(.Machine$double.eps, abs_tol - irc$error)
+    tol_floor <- max(abs_tol * 0.01, 1e-12)
+    remaining_tol <- max(tol_floor, abs_tol - irc$error)
     iac <- integrate_admin_cens(event_survival_w, cens_survival_only_t_w,
       t_upper_rand, cov_dens_w, cov_bounds,
       abs_tol = remaining_tol
@@ -430,8 +431,7 @@ estimate_cens_prop <- function(
       finite = TRUE,
       lower = t_min,
       upper = t_max,
-      null.ok = TRUE,
-      add = coll
+      null.ok = TRUE
     )
     if (is.null(tau)) {
       # Random censoring only happens up to:

@@ -15,7 +15,7 @@ estimate_cens_prop(
      stats::dexp(t, rate = lambda_c)
  },
   time_admin_cens = t_max,
-  time_accrual = t_min,
+  time_accrual = 0,
   target = "lambda_c",
   target_bounds = c(1e-05, 5),
   t_min = 0,
@@ -57,7 +57,7 @@ Must be vectorized in \code{t} and be consistent with \code{cens_survival}.}
 censoring.}
 
 \item{time_accrual}{Numeric scalar. Accrual time span
-\mjeqn{\tau_{\text{acc}}}{tau_acc}. Use \code{0} for no accrual.}
+\mjeqn{\tau_{\text{acc}}}{tau_acc}. Use \code{0} for no accrual (default).}
 
 \item{target}{Character scalar. Name of the censoring parameter inside
 \code{cens_survival} and \code{cens_density} (e.g., \code{"lambda_c"}).}
@@ -84,7 +84,8 @@ censoring proportion is evaluated at the time point \code{tau} instead of
 overall time.
 
 The returned function has class \code{"cens_prop_fun"} and supports
-S3 methods such as \code{\link[=print]{print()}} and \code{\link[=plot]{plot()}} for summarizing and
+S3 methods such as \code{\link[=print.cens_prop_fun]{print()}} and
+\code{\link[=plot.cens_prop_fun]{plot()}} for summarizing and
 visualizing the censoring model.
 }
 \description{
@@ -97,8 +98,8 @@ are supported.
 \details{
 This function returns the expected censoring proportion over the
 covariates
-\mjeqn{P(\delta=0\mid\lambda_{C_{\text{rnd}}})=E_X\Bigg[P(\delta=0\mid
-\mathbf{X},\lambda_{C_{\text{rnd}}})\Bigg]}{P(delta=0|lambda_C_rnd)=
+\mjeqn{P(\delta=0\mid\lambda_{C_{\text{rnd}}})=E_X\left[P(\delta=0\mid
+\mathbf{X},\lambda_{C_{\text{rnd}}})\right]}{P(delta=0|lambda_C_rnd)=
 E_X[P(delta=0|X,lambda_C_rnd)}
 obtained by numerical integration of survival and censoring functions
 over time and finally integrating over the covariate distributions. The
