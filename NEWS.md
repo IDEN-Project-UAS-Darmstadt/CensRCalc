@@ -1,5 +1,7 @@
 # CensRCalc (development version)
 
+Release candidate of 0.1.0.
+
 ## Major changes
 
 * Added parameter `tau`, which allows evaluating the censoring proportion at a
@@ -16,7 +18,7 @@
 * Development workflow improvements and fixes.
 * Documentation improvements and fixes.
 
-# CensRCalc 0.0.1.9000
+# CensRCalc 0.1.0
 
 * Added parameter `tau`, which allows evaluating the censoring proportion at a
   specific time point $\tau$.
