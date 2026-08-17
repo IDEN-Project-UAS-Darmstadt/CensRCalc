@@ -27,7 +27,11 @@
     "-c",
     "echo 'if(file.exists(\"~/.vscode-R/init.R\")) source(\"~/.vscode-R/init.R\")' > ~/.Rprofile && Rscript -e 'tinytex::install_tinytex()' && echo 'export PATH=\"$HOME/bin:$PATH\"' >> ~/.bashrc"
   ],
-  "postStartCommand": "tlmgr install makeindex",
+  "postStartCommand": [
+    "sh",
+    "-c",
+    "export PATH=\"$HOME/bin:$PATH\" && tlmgr install makeindex"
+  ],
   "customizations": {
     "vscode": {
       "settings": {
