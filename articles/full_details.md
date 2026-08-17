@@ -352,16 +352,16 @@ estimator <- estimate_cens_prop(event_surv, cov_dens, cov_bounds,
   cens_dens = cens_dens,
   target_bounds = bounds
 )
-#> DEBUG [2026-07-24 07:32:01] Density total integral calculated as: 0.999559635073658
-#> DEBUG [2026-07-24 07:32:01] Density total integral calculated as: 0.999559635073658
-#> DEBUG [2026-07-24 07:32:01] Density total integral calculated as: 0.999999903558124
-#> DEBUG [2026-07-24 07:32:01] Density total integral calculated as: 0.999999903558124
-#> DEBUG [2026-07-24 07:32:01] Density total integral calculated as: 0.999999998533039
-#> DEBUG [2026-07-24 07:32:01] Density total integral calculated as: 0.999999998533039
-#> DEBUG [2026-07-24 07:32:01] Density total integral calculated as: 0.999999977140023
-#> DEBUG [2026-07-24 07:32:01] Density total integral calculated as: 0.999999977140023
-#> DEBUG [2026-07-24 07:32:01] Density total integral calculated as: 1.00000017787208
-#> DEBUG [2026-07-24 07:32:01] Density total integral calculated as: 1.00000017787208
+#> DEBUG [2026-08-17 11:33:09] Density total integral calculated as: 0.999559635073658
+#> DEBUG [2026-08-17 11:33:09] Density total integral calculated as: 0.999559635073658
+#> DEBUG [2026-08-17 11:33:09] Density total integral calculated as: 0.999999903558124
+#> DEBUG [2026-08-17 11:33:09] Density total integral calculated as: 0.999999903558124
+#> DEBUG [2026-08-17 11:33:09] Density total integral calculated as: 0.999999998533039
+#> DEBUG [2026-08-17 11:33:09] Density total integral calculated as: 0.999999998533039
+#> DEBUG [2026-08-17 11:33:09] Density total integral calculated as: 0.999999977140023
+#> DEBUG [2026-08-17 11:33:09] Density total integral calculated as: 0.999999977140023
+#> DEBUG [2026-08-17 11:33:09] Density total integral calculated as: 1.00000017787208
+#> DEBUG [2026-08-17 11:33:09] Density total integral calculated as: 1.00000017787208
 log_threshold(INFO, namespace = "CensRCalc") # Reset logger to INFO level
 
 lambda_c_to_plot <- seq(bounds[1], bounds[2], length.out = 100)
@@ -542,7 +542,7 @@ sessionInfo()
 #> [1] stats     graphics  grDevices utils     datasets  methods   base     
 #> 
 #> other attached packages:
-#> [1] logger_0.4.2    progressr_1.0.0 CensRCalc_0.1.0
+#> [1] logger_0.4.2    progressr_1.0.0 CensRCalc_0.1.1
 #> 
 #> loaded via a namespace (and not attached):
 #>  [1] cli_3.6.6         knitr_1.51        rlang_1.3.0       xfun_0.60        
@@ -552,7 +552,7 @@ sessionInfo()
 #> [17] fastmap_1.2.0     yaml_2.3.12       lifecycle_1.0.5   compiler_4.6.1   
 #> [21] mathjaxr_2.0-0    fs_2.1.0          Rcpp_1.1.2        htmlwidgets_1.6.4
 #> [25] systemfonts_1.3.2 digest_0.6.39     R6_2.6.1          cubature_2.1.4-1 
-#> [29] Rdpack_2.6.6      rbibutils_2.4.1   checkmate_2.3.4   bslib_0.11.0     
+#> [29] Rdpack_2.6.6      rbibutils_2.4.1   checkmate_2.3.4   bslib_0.12.0     
 #> [33] tools_4.6.1       pkgdown_2.2.1     cachem_1.1.0      desc_1.4.3
 ```
 
