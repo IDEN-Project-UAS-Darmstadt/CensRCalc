@@ -12,8 +12,6 @@ Release candidate of 0.1.1
 
 # CensRCalc 0.1.1
 
-Release candidate of 0.1.1
-
 ## Major changes
 
 * None
