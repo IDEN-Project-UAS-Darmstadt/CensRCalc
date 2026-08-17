@@ -30,7 +30,7 @@
   "postStartCommand": [
     "sh",
     "-c",
-    "export PATH=\"$HOME/bin:$PATH\" && tlmgr install makeindex"
+    "export PATH=\"$HOME/bin:$PATH\" && tlmgr install makeindex && tlmgr path add"
   ],
   "customizations": {
     "vscode": {
